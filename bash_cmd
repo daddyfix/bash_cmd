@@ -19,7 +19,7 @@
 # ╚════════════════════════════════════════════════════════════════════════════╝
 # Version 2021-04-04
 
-export CMDFILE="${HOME}/.cmdnotes"
+export CMDFILE="/pimedia_scripts/commands.txt"
 
 cmd() {
   local fzf_options="--height 50% --reverse --exact"
