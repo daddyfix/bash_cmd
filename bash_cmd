@@ -19,10 +19,9 @@
 # ╚════════════════════════════════════════════════════════════════════════════╝
 # Version 2021-04-04
 
-export CMDFILE="/pimedia_scripts/commands.txt"
+export CMDFILE="/pimedia_scripts/mqtt/bash-commands.txt"
 
 cmd() {
-  local fzf_options="--height 50% --reverse --exact"
   local help="%s
 Store and run commands from file: [${CMDFILE##*/}]
 
