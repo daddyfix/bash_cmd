@@ -45,6 +45,9 @@ Usage:
   case "$1" in
     [1-9]*)
       line=$(sed -n "${1}"p "${CMDFILE}")
+      if [ ! -z "$2" ] && [ ! -z "$3" ]; then
+         line=${line/\{$2\}/$3}
+      fi
       eval "${line}"
     ;;
     -n|--number|--numbers)
