@@ -30,6 +30,10 @@ Usage:
   cmd\t\t\t:displays stored commands by number
     Text or Command\t:any text after cmd will be added to file
     NUM\t\t\t:run line number as command
+    \t\t\t:You can add '{args}' tages to your command line to replace before executing
+    \t\t\t:ie. $ cmd echo \"Dogs love {arg1} and {arg2}\"
+    \t\t\t:    $ cmd 1 arg1 cheese arg2 bones
+    \t\t\t:    Dogs love cheese and bones
     -n |--numbers\t:displays stored commands by number
     -a |--add-last\t:add last command retaining double/single quotes
     -e |--edit\t\t:edit command file
