@@ -22,8 +22,7 @@
 
 export CMDFILE="/pimedia_scripts/mqtt/bash-commands.txt"
 
-cmd() {
-  local help="%s
+help="%s
 Store and run commands from file: [${CMDFILE##*/}]
 
 Usage:
@@ -46,54 +45,54 @@ Usage:
     -h |--help\t\t:this usage
   Current cmd PATH:\t${CMDFILE}\n\n"
 
-  if [[ ! -e "${CMDFILE}" ]]; then touch "${CMDFILE}"; fi
-  case "$1" in
-    [1-9]*)
-      line=$(sed -n "${1}"p "${CMDFILE}")
-      shift
-      while [ ! -z "${1}" ] && [ ! -z "${2}" ]; do
-         line=${line/\{$1\}/$2}
-         shift 2
-      done
-      eval "${line}"
-    ;;
-    -n|--number|--numbers)
-      cat -n "${CMDFILE}"
-    ;;
-    --clear)
-      read -r -p "Press Enter to clear/delete ${CMDFILE##*/} or CTRL+C to cancel: "
-      > "${CMDFILE}" && printf "%sCleared ${CMDFILE}\n"
-    ;;
-    -a|--add-last)
-      lastcmd=$(fc -ln | tail -2 | head -1)
-      printf '%s \n' "${lastcmd#"${lastcmd%%[![:space:]]*}"}" >> "${CMDFILE}" && printf "%sAdded last command to ${CMDFILE##*/}\n" || printf "An error happened!\n"
-    ;;
-    -d|--delete)
-      if [[ -z "${2}" ]]; then
-        printf "No input entered\n"
-      else sed -i "${2}d" "${CMDFILE}"
-        printf "%sRemoved line ${2} from ${CMDFILE##*/}\n"
-      fi
-    ;;
-    -dd|--delete-double)
-      #sed '$!N; /^\(.*\)\n\1$/!P; D' "${CMDFILE}"
-      sed -i '/^ *$/d' "${CMDFILE}"
-      printf "%sDeleted blank lines from ${CMDFILE##*/}\n"
-    ;;
-    -b|--backup)
-      cp "${CMDFILE}" "${CMDFILE}"-"$(printf '%(%Y-%m-%d_%H.%M.%S)T' -1)"
-      printf "%sCreated backup copy of ${CMDFILE##*/}\n"
-    ;;
-    -c|--change)
-      if [[ -z "$2" ]]; then
-        export CMDFILE="${HOME}/.cmdnotes"
-      else
-        export CMDFILE="$2"
-      fi
-      printf "%sChanged CMDFILE path to: ${CMDFILE}\n"
-    ;;
-    -e|--edit) "${EDITOR}" "${CMDFILE}" ;;
-    -h|--help) printf "${help}" ;;
-    *) if [[ -z "$1" ]]; then cat -n "${CMDFILE}"; else printf '%s \n' "$*" >> "${CMDFILE}"; fi ;;
-  esac
-}
+if [[ ! -e "${CMDFILE}" ]]; then touch "${CMDFILE}"; fi
+
+case "$1" in
+  [1-9]*)
+    line=$(sed -n "${1}"p "${CMDFILE}")
+    shift
+    while [ ! -z "${1}" ] && [ ! -z "${2}" ]; do
+       line=${line/\{$1\}/$2}
+       shift 2
+    done
+    eval "${line}"
+  ;;
+  -n|--number|--numbers)
+    cat -n "${CMDFILE}"
+  ;;
+  --clear)
+    read -r -p "Press Enter to clear/delete ${CMDFILE##*/} or CTRL+C to cancel: "
+    > "${CMDFILE}" && printf "%sCleared ${CMDFILE}\n"
+  ;;
+  -a|--add-last)
+    lastcmd=$(fc -ln | tail -2 | head -1)
+    printf '%s \n' "${lastcmd#"${lastcmd%%[![:space:]]*}"}" >> "${CMDFILE}" && printf "%sAdded last command to ${CMDFILE##*/}\n" || printf "An error happened!\n"
+  ;;
+  -d|--delete)
+    if [[ -z "${2}" ]]; then
+      printf "No input entered\n"
+    else sed -i "${2}d" "${CMDFILE}"
+      printf "%sRemoved line ${2} from ${CMDFILE##*/}\n"
+    fi
+  ;;
+  -dd|--delete-double)
+    #sed '$!N; /^\(.*\)\n\1$/!P; D' "${CMDFILE}"
+    sed -i '/^ *$/d' "${CMDFILE}"
+    printf "%sDeleted blank lines from ${CMDFILE##*/}\n"
+  ;;
+  -b|--backup)
+    cp "${CMDFILE}" "${CMDFILE}"-"$(printf '%(%Y-%m-%d_%H.%M.%S)T' -1)"
+    printf "%sCreated backup copy of ${CMDFILE##*/}\n"
+  ;;
+  -c|--change)
+    if [[ -z "$2" ]]; then
+      export CMDFILE="${HOME}/.cmdnotes"
+    else
+      export CMDFILE="$2"
+    fi
+    printf "%sChanged CMDFILE path to: ${CMDFILE}\n"
+  ;;
+  -e|--edit) "${EDITOR}" "${CMDFILE}" ;;
+  -h|--help) printf "${help}" ;;
+  *) if [[ -z "$1" ]]; then cat -n "${CMDFILE}"; else printf '%s \n' "$*" >> "${CMDFILE}"; fi ;;
+esac
